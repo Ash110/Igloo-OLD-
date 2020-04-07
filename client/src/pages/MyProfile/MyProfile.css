@@ -1,0 +1,68 @@
+body{
+    background-color:white ;
+}
+.profileBody{
+    width: 100%;
+    height: 100px;
+    background: white;
+}
+#profileImgSmall{
+    width: 200px;
+    height: 200px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    border-radius: 100000px;
+    transition: 0.3s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+#profileImgLarge{
+    width: 250px;
+    height: 250px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    border-radius: 10px;
+    transition: 0.3s;
+    -moz-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+#profileName{
+    text-align: center;
+    font-size: 2rem;
+    margin-top: 20px;
+}
+#profileUsername{
+    text-align: center;
+    margin-top: 0px;
+}
+#profileEditButtonGroup{
+    display: block;
+    width: 100%;
+    left: auto;
+    right: auto;
+}
+#profileBio{
+    text-align: center;
+    margin-top: 0px;
+    white-space: pre-wrap;
+}
+@media screen and (min-width: 768px) {
+    #profileImg:hover {
+        width: 400px;
+        height: 400px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        border-radius: 100000px;
+    }
+}

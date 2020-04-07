@@ -1,0 +1,70 @@
+@font-face {
+    font-family: bebas;
+    src: url(../../assets/BebasKai.otf);
+}
+
+#lightHeader{
+    background: white;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-family: bebas;
+    font-size: 2rem;
+    /* box-shadow: 0 5px 10px rgb(236, 236, 236); */
+    z-index: 10;
+    color: black;
+    /* color: #E23D3C; */
+}
+
+#darkHeader{
+    background: rgb(0, 0, 0);
+    color: white;
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-family: bebas;
+    font-size: 2rem;
+    /* box-shadow: 0 5px 10px rgb(236, 236, 236); */
+    z-index: 10;
+    /* color: #E23D3C; */
+}
+
+#lightHeaderDrawer {
+    background-color: white;
+    color : black;
+    padding: 30px;
+    height: 100%;
+}
+
+#darkHeaderDrawer{
+    background-color: black;
+    color : white;
+    padding: 30px;
+    height: 100%;
+}
+
+#darkHeaderDrawer i{
+    color : white;
+}
+
+#beta{
+    font-size: 0.8rem;
+    margin-top: -20px;
+    font-family: Arial, Helvetica, sans-serif;
+    /* z-index: 20; */
+}
+#headerMenuIcon {
+    /* padding: 10px; */
+    margin-top: 20px;
+    font-size: 2rem;
+    margin-left: 20px;
+}
+
+@media screen and (min-width: 550px) {
+    #headerMenuIcon {
+        /* padding: 10px; */
+        margin-top: 20px;
+        font-size: 2rem;
+        margin-left: 80px;
+    }
+}

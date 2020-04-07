@@ -1,0 +1,5 @@
+{
+    "mongoUri": <Local MongoURI or Mongo Atlas connection URI>,
+    "jwtSecret": <Any string to use as a secret key for JSON Web Token> ,
+    "cookiesToken" : <Any string to use as key for cookies>
+}

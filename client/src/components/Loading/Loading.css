@@ -1,0 +1,10 @@
+.loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+}
+.caption{
+    margin-top: 30px;
+    font-size: 1.3rem;
+}

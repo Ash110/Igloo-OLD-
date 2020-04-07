@@ -1,0 +1,29 @@
+#searchPagesList{
+    margin-left: 10%;
+}
+
+.suggestPagesDiv{
+    width: 80%;
+    margin-top: 30px;
+    text-decoration-color: none;
+    margin-left: 10%;
+    border-radius: 5px;
+    background: rgb(160, 160, 255);
+    background: linear-gradient(142deg, rgba(160, 255, 196, 0.479) -10%, rgba(171, 217, 255, 0.48) 100%);
+    padding: 20px;
+}
+
+.suggestPagesTitle {
+    font-size: 1.5rem;
+    color: black;
+}
+.suggestPagesDescription{
+    font-size: 1rem;
+    color: black;
+}
+
+@media screen and (min-width: 768px) {
+    #searchPagesList {
+        margin-left: 10%;
+    }
+}

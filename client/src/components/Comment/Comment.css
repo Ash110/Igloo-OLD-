@@ -1,0 +1,51 @@
+#commentContainer{
+    margin:10px;
+    padding: 10px;
+    /* border-left: rgb(194, 194, 196) 2px solid; */
+    /* box-shadow: rgb(230, 228, 228) -5px 10px 30px; */
+}
+
+#replyContainerLight {
+    margin: 10px;
+    background-color: rgb(250, 250, 250);
+    padding: 10px;
+    color: black;
+    /* border-left: rgb(208, 209, 208) 2px solid; */
+    /* box-shadow: rgb(230, 228, 228) -5px 10px 30px; */
+}
+
+#replyContainerDark{
+    margin: 10px;
+    background-color:#191c22;
+    padding: 10px;
+    color: white;
+    /* border-left: rgb(208, 209, 208) 2px solid; */
+    /* box-shadow: rgb(230, 228, 228) -5px 10px 30px; */
+}
+
+#commenterName{
+    margin-left: 10px;
+    font-size: 1.05rem;
+}
+
+#commentText{
+    margin-left: 10px;
+    margin-top: -10px;
+}
+
+#replyText {
+    margin-left: 10px;
+    margin-top: -10px;
+    color:grey;
+}
+
+#showRepliesText {
+    margin-left: 10px;
+    margin-top: 0px;
+    color: rgb(147, 170, 236);
+}
+
+#commentReplyArrow{
+    margin-top: 20px;
+    margin-left: 15px;
+}

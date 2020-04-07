@@ -1,0 +1,1 @@
+export const captchaKey = <Captcha Key for Google Captcha>

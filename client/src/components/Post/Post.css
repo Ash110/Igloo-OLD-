@@ -1,0 +1,63 @@
+#postContainer{
+    position: relative;
+    width: 95%;
+    margin-left: 2.5%;
+    margin-top: 20px;
+}
+#postCardDark {
+    background-color:#222831;
+    border: none;
+    box-shadow: none;
+    color : white
+}
+#postCardLight{
+    border: none;
+    box-shadow: none;
+}
+#postCardSubheaderDark{
+    color : white;
+}
+#postCardSubheaderLight{
+    color : black
+}
+
+#postCardCaptionDark{
+    color : white;
+}
+
+#postCardCaptionLight {
+    color : black;
+}
+
+#postCardEnterCommentDark{
+    color : white;
+}
+
+#postCardEnterCommentLight{
+
+}
+
+#postImage{
+    /* position: relative; */
+    left: 0px;
+    width: 100%;
+}
+#textCard{
+    background: rgb(253, 243, 243);
+    border: none;
+    box-shadow: none;
+}
+@media screen and (min-width: 550px) {
+    #postContainer {
+        position: relative;
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 20px;
+    }
+
+    #postImage {
+        /* position: relative; */
+        left: 0px;
+        width: 100%;
+    }
+}

@@ -1,0 +1,17 @@
+#customAlert{
+    width: 95%;
+    margin-left: 2.5%;
+    padding: 10px;
+    border-radius: 5px;
+    background: rgb(160, 160, 255);
+    background: linear-gradient(142deg, rgba(160, 160, 255, 0.479) -10%, rgba(255, 171, 241, 0.48) 100%);
+    color:rgb(56, 55, 55);
+    font-family: 'Open Sans',sans-serif;
+}
+
+@media screen and (min-width: 550px) {
+    #customAlert{
+        width:60%;
+        margin-left: 20%;
+    }
+}

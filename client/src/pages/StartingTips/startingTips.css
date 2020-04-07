@@ -1,0 +1,58 @@
+@font-face {
+    font-family: bebas;
+    src: url(../../assets/BebasKai.otf);
+}
+
+
+/* Tip 1 */
+
+.tipContainer1{
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    color: black;
+}
+
+.tipBody{
+    padding: 60px;
+    margin-top: 10%;
+    color: black;
+}
+.greeting{
+    font-size: 1.8rem;
+    color: black;
+}
+.welcomeBody{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    /* background: #ddfce5; */
+    color: black;
+    /* overflow: hidden; */
+}
+#groupsWelcomePage{
+    width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+    .tipContainer1 {
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+    }
+
+    .tipBody {
+        padding-left: 300px;
+        padding-right: 300px;
+    }
+    #groupsWelcomePage {
+        width: 30%;
+        margin-left: 25%;
+    }
+}
+

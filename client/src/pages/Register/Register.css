@@ -1,0 +1,35 @@
+@font-face{
+    font-family: bebas;
+    src: url(../../assets/BebasKai.otf);
+}
+
+
+.loginLink{
+    color: #E23D3C;
+}
+
+.submitButton{
+    border-radius: 0;
+}
+
+.registerContainer {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 10%;
+    margin-bottom: 20%;
+    background: #ffffff;
+    padding: 20px;
+}
+
+
+@media screen and (min-width: 768px){
+    .registerContainer{
+        width: 60%;
+        margin-left: 20%;
+        margin-top: 5%;
+        margin-bottom: 5%;
+        padding: 30px;
+        border-radius: 10px;
+    }
+}
+

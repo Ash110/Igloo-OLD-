@@ -1,0 +1,19 @@
+#postGrid{
+    margin-top: 400px;
+    margin-bottom: 30px;
+
+}
+#postGridFriend{
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+@media screen and (min-width: 768px) {
+    #postGrid{
+        padding: 100px;
+        margin-top: 300px;
+    }
+    #postGridFriend {
+        padding: 100px;
+        margin-top: 25px;
+    }
+}

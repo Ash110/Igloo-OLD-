@@ -1,0 +1,19 @@
+#WarningIcon404 {
+    font-size: 10rem;
+    text-align: center;
+    margin-left: 30%;
+    margin-top: 20%;
+    color: rgb(255, 208, 0);
+}
+#Page404Text {
+    padding: 20px;
+    text-align: center;
+}
+@media screen and (min-width: 768px) {
+    #WarningIcon404 {
+        font-size: 10rem;
+        text-align: center;
+        margin-left: 45%;
+        margin-top: 10%;
+    }
+}

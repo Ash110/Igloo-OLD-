@@ -1,0 +1,10 @@
+#pagesList{
+    margin-top: 30px;
+}
+
+#addPageButton{
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    outline: none;
+}
