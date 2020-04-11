@@ -1,4 +1,4 @@
-# zoidberg
+# Igloo - The private social media
 
 Prerequisites : <br>
 node  [Install Node](https://nodejs.org/)<br>
@@ -10,7 +10,7 @@ Setup:
 
 Setup MongoDB Compass to connect your database
 
-In the root of zoidberg, in the folder called config, modify a file called default.json
+In the root of igloo, in the folder called config, modify a file called default.json
 
 In the default.json, setup the keys as -
 
