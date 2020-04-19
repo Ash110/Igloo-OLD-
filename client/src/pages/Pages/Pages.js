@@ -28,7 +28,7 @@ class Pages extends Component {
             },
             withCredentials: true
         }
-        axios.post('/api/pages/getPageInfo', { username: this.props.match.params.username }, config)
+        axios.post('/api/pages/getPageInfo', { username: this.props.match.params.username, pagename: this.props.match.params.pagename }, config)
             .then((res) => {
                 const { posts, creator, description, isSubscribed, name } = res.data;
                 this.setState({ posts, creator, isSubscribed, name, description, loaded: true });
@@ -45,7 +45,7 @@ class Pages extends Component {
             },
             withCredentials: true
         }
-        axios.post('/api/pages/subscribePage',{ username: this.props.match.params.username },config)
+        axios.post('/api/pages/subscribePage',{ username: this.props.match.params.username, pagename: this.props.match.params.pagename },config)
             .then(()=>{
                 this.setState({isSubscribed : true})
             })
@@ -61,7 +61,7 @@ class Pages extends Component {
             },
             withCredentials: true
         }
-        axios.post('/api/pages/unsubscribePage', { username: this.props.match.params.username }, config)
+        axios.post('/api/pages/unsubscribePage', { username: this.props.match.params.username, pagename: this.props.match.params.pagename }, config)
             .then(() => {
                 this.setState({isSubscribed : false})
             })

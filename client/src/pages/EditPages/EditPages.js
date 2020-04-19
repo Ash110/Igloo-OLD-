@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
-
 import Bottom from '../../components/Bottom/Bottom';
 import Header from '../../components/Header/Header';
 import PageEditor from '../../components/PageEditor/PageEditor';
@@ -12,7 +12,7 @@ import './EditPages.css'
 
 
 
-export default class EditPages extends Component {
+class EditPages extends Component {
     state = {
         pages: [],
         loaded: false,
@@ -74,18 +74,18 @@ export default class EditPages extends Component {
         }
         const pageName = this.state.newPageName;
         const pageDescription = this.state.newPageDesc;
-        const pageUsername = this.state.newPageUsername;
+        // const pageUsername = this.state.newPageUsername;
         if (!pageName) {
             alert("You need to set a page name!")
         }
         if (!pageDescription) {
             alert("You need to set a page description!")
         }
-        if (!pageUsername) {
-            alert("You need to set a page username to identify it!")
-        }
+        // if (!pageUsername) {
+        //     alert("You need to set a page username to identify it!")
+        // }
         else {
-            axios.post("/api/pages/newPage", { pageName, pageDescription, pageUsername }, config)
+            axios.post("/api/pages/newPage", { pageName, pageDescription }, config)
                 .then((res) => {
                     window.location.reload();
                 })
@@ -136,13 +136,8 @@ export default class EditPages extends Component {
                     required
                 />
                 <br /><br />
-                <TextField
-                    label="Enter unique page username"
-                    style={{ width: "80%" }}
-                    onChange={(e) => this.setState({ newPageUsername: e.target.value })}
-                    required
-                />
-                <br /><br />
+                {this.state.newPageName != "" ? <p>{`The URL of the page is going to be https://igloosocial.com/page/${this.props.username}/${this.state.newPageName.replace(/\s/g, '').toLocaleLowerCase()}`}</p> :<Fragment></Fragment>}
+                {/* <br /><br /> */}
                 <TextField
                     label="Enter page description"
                     style={{ width: "80%" }}
@@ -196,3 +191,14 @@ export default class EditPages extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    loggedIn: state.auth.loggedIn,
+    userToken: state.auth.userToken,
+    username: state.auth.username,
+    id: state.auth.id,
+    name: state.auth.name,
+    profilePicture: state.auth.profilePicture,
+    theme: state.auth.theme
+})
+export default connect(mapStateToProps, null)(EditPages);

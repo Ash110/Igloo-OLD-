@@ -16,16 +16,17 @@ const router = express.Router();
 //@desc    Create a new Page
 //access   Private
 router.post('/newPage', auth, async (req, res) => {
-    const { pageName, pageDescription, pageUsername } = req.body;
-    if(pageUsername.length <= 50){
-        if (pageName && pageDescription && pageUsername && pageUsername.match(/^[a-zA-Z0-9_]+$/, 'i')) {
+    const { pageName, pageDescription } = req.body;
+    if(pageName.length <= 50){
+        if (pageName && pageDescription && pageName.replace(/\s/g, '').toLowerCase().match(/^[a-zA-Z0-9_]+$/, 'i')) {
             try {
-                let page = await Page.findOne({ username: pageUsername });
-                if (!page) {
+                let user = await User.findById(req.id).populate('pages','name');
+                let page = user.pages.filter(page => page.name===pageName)
+                if (page.length === 0) {
                     page = new Page({
                         name: pageName,
                         description: pageDescription,
-                        username: pageUsername.toLowerCase(),
+                        username: pageName.replace(/\s/g, '').toLowerCase(),
                         creator: req.id,
                         members: new Array(req.id),
                         posts: []
@@ -36,17 +37,17 @@ router.post('/newPage', auth, async (req, res) => {
                     await user.updateOne({ pages });
                     res.status(200).send("Page successfully created!");
                 } else {
-                    res.status(400).send("The username is taken. Try another one.")
+                    res.status(400).send("The name is taken. Try another one.")
                 }
             } catch (err) {
                 console.log(err);
                 res.status(500).send("Server Error");
             }
         } else {
-            res.status(400).send("One of the required fields has not been filled and username can only contain alphanumericals and underscore")
+            res.status(400).send("One of the required fields has not been filled and name can only contain alphanumericals and underscore")
         }
     }else{
-        res.status(400).send("Username cannot be longer than 50 characters")
+        res.status(400).send("Name cannot be longer than 50 characters")
     }
 });
 
@@ -68,9 +69,13 @@ router.post('/getPages', auth, async (req, res) => {
 //access   Public
 router.post('/getPageInfo', async (req, res) => {
     try {
-        const { username } = req.body
-        const page = await Page.findOne({ username: username.toString().toLowerCase() }).populate('creator', 'name username');
-        if(page){
+        const { username, pagename } = req.body;
+        console.log(username, pagename)
+        const user = await User.findOne({username}).populate('pages','name username')
+        let page = (user.pages.filter(page => page.username === pagename))
+        // const page = await Page.findOne({ username: username.toString().toLowerCase() }).populate('creator', 'name username');
+        if(page.length > 0){
+            page = await Page.findById(page[0]._id).populate('creator', 'name username');
             var isSubscribed = false;
             if (req.cookies.userToken) {
                 const decoded = jwt.verify(req.cookies.userToken, config.get('jwtSecret'));
@@ -96,8 +101,11 @@ router.post('/getPageInfo', async (req, res) => {
 //access   Private
 router.post('/subscribePage', auth, async (req, res) => {
     try {
-        const { username } = req.body
-        const page = await Page.findOne({ username: username.toString() });
+        const { username, pagename } = req.body
+        const creator = await User.findOne({ username }).populate('pages', 'username');
+        console.log(creator.pages)
+        let page = creator.pages.filter(page => page.username===pagename);
+        page = await Page.findById(page[0]._id);
         const user = await User.findById(req.id);
         if (page && user) {
             let subscribedPages = [...user.subscribedPages, page._id];
@@ -119,8 +127,10 @@ router.post('/subscribePage', auth, async (req, res) => {
 //access   Private
 router.post('/unsubscribePage', auth, async (req, res) => {
     try {
-        const { username } = req.body
-        const page = await Page.findOne({ username: username.toString() });
+        const { username, pagename } = req.body
+        const creator = await User.findOne({username}).populate('pages','username');
+        let page = creator.pages.filter(page => page.username===pagename);
+        page = await Page.findById(page[0]._id);
         const user = await User.findById(req.id);
         if (page && user) {
             await Page.updateOne({ _id: page._id }, { $pull: { members: req.id } })
@@ -392,18 +402,18 @@ router.post('/getEditPageInfo', auth, async (req, res) => {
 //access   Private
 router.post('/updatePage', auth, async (req, res) => {
     try {
-        const {name, username, description} = req.body;
-        if (!(name && username && description && username.match(/^[a-zA-Z0-9_]+$/, 'i'))){
-            res.status(400).send("One of the required fields has not been filled and username can only contain alphanumericals and underscore")
+        const {name, description} = req.body;
+        if (!(name && description && name.replace(/\s/g, '').toLowerCase().match(/^[a-zA-Z0-9_]+$/, 'i'))){
+            res.status(400).send("One of the required fields has not been filled and name can only contain alphanumericals and underscore")
         }else{
-            if(username.length<=50){
+            if(name.length<=50){
                 const page = await Page.findById(req.body.id)
-                const page2 = await Page.findOne({ username : username.toLowerCase() })
+                const page2 = await Page.findOne({ username: name.replace(/\s/g, '').toLowerCase() })
                 if (!page2 || page2.username.toLowerCase() == page.username.toLowerCase()) {
-                    await Page.findOneAndUpdate({ _id: req.body.id }, { name, username: username.toLowerCase(), description });
+                    await Page.findOneAndUpdate({ _id: req.body.id }, { name, username: name.replace(/\s/g, '').toLowerCase(), description });
                     res.status(200).send("Success!");
                 } else {
-                    res.status(400).send("Username is already taken!");
+                    res.status(400).send("Name is already taken!");
                 }
             }else{
                 res.status(400).send("Username cannot be greater than 50 characters")

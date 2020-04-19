@@ -61,19 +61,19 @@ export default class Search extends Component {
                             Check out some of the trending pages to follow
                         </div>
                         <br />
-                        <Link to="/page/news">
+                        <Link to="/page/igloo/news">
                             <div className="suggestPagesDiv">
                                 <p className="suggestPagesTitle">World News</p>
                                 <p className="suggestPagesDescription">Get the latest news from trusted, verified sources</p>
                             </div>
                         </Link>
-                        <Link to="/page/memes">
+                        <Link to="/page/igloo/memes">
                             <div className="suggestPagesDiv">
                                 <p className="suggestPagesTitle">Memes</p>
                                 <p className="suggestPagesDescription">This needs no description</p>
                             </div>
                         </Link>
-                        <Link to="/page/photography">
+                        <Link to="/page/igloo/photography">
                             <div className="suggestPagesDiv">
                                 <p className="suggestPagesTitle">Photography</p>
                                 <p className="suggestPagesDescription">Some of the best photos from around the world, open and free to use</p>

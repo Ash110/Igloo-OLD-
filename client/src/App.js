@@ -53,7 +53,7 @@ const App = (props) => {
 						<Route exact path="/help" component={Help} />
 						<Route exact path="/contactus" component={ContactUs} />
 						<Route exact path="/forgotpassword/:code" component={ForgotPassword} />
-						<Route exact path="/page/:username" component={Pages} />
+						<Route exact path="/page/:username/:pagename" component={Pages} />
 						<Route exact path="/pagepost/:pageId" component={PagePostPage} />
 						<PrivateRoute exact path="/user/:username" component={Profile} />
 						<PrivateRoute exact path="/search" component={Search} />

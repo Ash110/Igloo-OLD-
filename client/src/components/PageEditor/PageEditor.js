@@ -35,7 +35,7 @@ export default class PageEditor extends Component {
             withCredentials: true
         }
         const{name, username, description} = this.state;
-        if(!(name&&username&&description)){
+        if(!(name&&description)){
             alert("All fields are required!")
         }else{
             axios.post('/api/pages/updatePage', { name, username, description, id: this.props.id }, config)
@@ -80,6 +80,13 @@ export default class PageEditor extends Component {
                     </IconButton>
                 </Toolbar>
                 <br />
+                <h4 style={{ width: "80%", marginLeft: "10%" }}>How do I post to this page?</h4>
+                <br/>
+
+                <p style={{ width: "80%", marginLeft: "10%" }}>
+                    Go to your homepage, and click on the new post button. Over there, click on the pages tab, to post to a particular page 
+                </p>
+                <br/><br/>
                 <TextField
                     value={this.state.name}
                     onChange={(e) => this.setState({ name: e.target.value })}
@@ -87,14 +94,14 @@ export default class PageEditor extends Component {
                     label="Edit Page Name"
                     style={{ width: "80%", marginLeft: "10%" }}
                 />
-                <br />
+                {/* <br />
                 <TextField
                     value={this.state.username}
                     onChange={(e) => this.setState({ username: e.target.value })}
                     variant="outlined"
                     label="Change username if needed"
                     style={{ width: "80%", marginLeft: "10%" }}
-                />
+                /> */}
                 <br />
                 <TextField
                     value={this.state.description}
