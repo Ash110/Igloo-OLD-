@@ -20,10 +20,10 @@ class PostUploader extends Component {
         crop: {
             x: 0,
             y: 0,
-            // width: 100,
-            // height: 100,
+            width: 100,
+            height: 100,
             unit: "px",
-            // aspect: 1 / 1,
+            aspect: 1 / 1,
         },
         croppedImageUrl: "",
         caption: "",

@@ -1,5 +1,14 @@
 #postGridImage{
-    height: 100%;
-    width: 100%;
+    height: 100px;
+    width: 100px;
     margin:0;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgb(218, 217, 217);
+}
+
+@media screen and (min-width: 768px) {
+    #postGridImage {
+        height: 300px;
+        width: 300px;
+    }
 }

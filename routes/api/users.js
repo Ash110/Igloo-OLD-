@@ -115,6 +115,7 @@ router.post('/login',
         if(validateEmail(email)){
             try {
                 const user = await User.findOne({ email });
+                
                 if (!user) {
                     return res.status(400).json({ errors: [{ msg: "Incorrect username or password. Please try again." }] });
                 }
@@ -129,6 +130,8 @@ router.post('/login',
                 await user.updateOne({ lastActive: new Date() });
                 newLogin(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
                 sendNewLoginMail(user.email, user.username, (req.headers['x-forwarded-for'] || req.connection.remoteAddress))
+                    .then(()=>console.log("Email Sent"))
+                    .catch((err)=>console.log(err));
                 jwt.sign(
                     payload,
                     config.get('jwtSecret'),
@@ -146,7 +149,7 @@ router.post('/login',
             }
         }else{
             try {
-                const user = await User.findOne({ username : email });
+                const user = await User.findOne({ username : email.toLowerCase() });
                 if (!user) {
                     return res.status(400).json({ errors: [{ msg: "Incorrect username or password. Please try again." }] });
                 }
@@ -161,6 +164,8 @@ router.post('/login',
                 await user.updateOne({ lastActive: new Date() });
                 newLogin(req.headers['x-forwarded-for'] || req.connection.remoteAddress);
                 sendNewLoginMail(user.email, user.username, (req.headers['x-forwarded-for'] || req.connection.remoteAddress))
+                    .then(() => console.log("Email Sent"))
+                    .catch((err) => console.log(err));
                 jwt.sign(
                     payload,
                     config.get('jwtSecret'),

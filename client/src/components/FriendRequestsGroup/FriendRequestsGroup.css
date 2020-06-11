@@ -1,11 +1,14 @@
 #friendsListGroup{
-    width: 90%;
-    margin-left: 5%;
+    width: 95%;
+    margin-left: 2.5%;
     margin-top: 30px;
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
 }
 
 #showMoreRequests{
-    margin-left: 5%;
+    
 }
 
 body{

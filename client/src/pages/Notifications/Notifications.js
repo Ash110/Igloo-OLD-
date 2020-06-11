@@ -7,7 +7,7 @@ import Header from '../../components/Header/Header';
 import Notification from './Notification';
 import FriendRequests from '../../components/FriendRequestsGroup/FriendRequestsGroup';
 
-
+import './Notifications.css'
 
 export default class Notifications extends Component {
     state = {
@@ -36,14 +36,16 @@ export default class Notifications extends Component {
             <Fragment>
                 <Header />
                 <FriendRequests />
-                <List>
+                <div id="notificationsContainer">
+                    <List>
 
-                    {
-                        this.state.notifications.map((notification) => {
-                            return (<Notification notification={notification} key={notification._id} />)
-                        })
-                    }
-                </List>
+                        {
+                            this.state.notifications.map((notification) => {
+                                return (<Notification notification={notification} key={notification._id} />)
+                            })
+                        }
+                    </List>
+                </div>
                 <Bottom />
             </Fragment>
         )

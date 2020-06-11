@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
-import { Button,  Dialog, DialogTitle,
-     DialogContent,DialogContentText,IconButton } from '@material-ui/core'
+import {
+    Button, Dialog, DialogTitle,
+    DialogContent, DialogContentText, IconButton
+} from '@material-ui/core'
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import Header from '../../components/Header/Header';
@@ -23,7 +25,6 @@ class MyProfile extends React.Component {
         bio: "",
         profilePicture: "https://cdn.pixabay.com/photo/2017/11/10/05/48/user-2935527_960_720.png",
         loaded: false,
-        dropdownValue: '',
         imageSize: 0,
         showProfilePictureEditor: false,
         showBioEditor: false,
@@ -34,9 +35,10 @@ class MyProfile extends React.Component {
         updatedName: "",
         showEmailEditor: false,
         updatedEmail: "",
-        submittingStage : 0,
-        showFriends : false,
-        shareMenu : false
+        submittingStage: 0,
+        showFriends: false,
+        shareMenu: false,
+        accountOptions: false,
     }
     componentDidMount() {
         let { username, name, bio, id, profilePicture } = this.props;
@@ -55,14 +57,11 @@ class MyProfile extends React.Component {
     }
 
     handleClose = () => {
-        this.setState({ shareMenu: false, showFriends : false });
+        this.setState({ shareMenu: false, showFriends: false, accountOptions: false });
     }
 
-    handleDropdownChange = (e) => {
-        this.setState({ dropdownValue: e.target.value })
-    }
     submitNewBio = () => {
-        this.setState({submittingStage  : 1});
+        this.setState({ submittingStage: 1 });
         const config = {
             headers: {
                 "Content-Type": "application/json",
@@ -71,7 +70,7 @@ class MyProfile extends React.Component {
         }
         axios.post('/api/users/updateBio', { bio: this.state.updatedBio }, config)
             .then((res) => {
-                this.setState({ bio: this.state.updatedBio, showBioEditor: false , submittingStage : 0});
+                this.setState({ bio: this.state.updatedBio, showBioEditor: false, submittingStage: 0 });
             })
             .catch((err) => {
                 alert(err);
@@ -90,7 +89,7 @@ class MyProfile extends React.Component {
         axios.post('/api/users/updateUsername', { username: this.state.updatedUsername }, config)
             .then((res) => {
                 if (res.data.valid) {
-                    this.setState({ username: this.state.updatedUsername, showUsernameEditor : false, submittingStage : 0 });
+                    this.setState({ username: this.state.updatedUsername, showUsernameEditor: false, submittingStage: 0 });
                 } else {
                     alert(res.data.message);
                 }
@@ -111,7 +110,7 @@ class MyProfile extends React.Component {
         }
         axios.post('/api/users/updateName', { name: this.state.updatedName }, config)
             .then((res) => {
-                this.setState({ name: this.state.updatedName, showNameEditor : false, submittingStage : 0 });
+                this.setState({ name: this.state.updatedName, showNameEditor: false, submittingStage: 0 });
             })
             .catch((err) => {
                 alert(err);
@@ -157,37 +156,9 @@ class MyProfile extends React.Component {
 
 
     render() {
-        if (this.state.dropdownValue === 1) {
-            this.setState({ showProfilePictureEditor: true, dropdownValue: '' });
-        }
-        if (this.state.dropdownValue === 2) {
-            this.setState({ showBioEditor: true, dropdownValue: '' });
-        }
-        if (this.state.dropdownValue === 3) {
-            this.setState({ showUsernameEditor: true, dropdownValue: '' });
-        }
-        if (this.state.dropdownValue === 4) {
-            this.setState({ showNameEditor: true, dropdownValue: '' });
-        }
-        if (this.state.dropdownValue === 5) {
-            this.setState({ showEmailEditor: true, dropdownValue: '' });
-        }
-        if (this.state.dropdownValue === 6) {
-            this.props.logOut();
-            window.location.href = "/"
-        }
         if (!this.state.loaded) {
             return (<Loading />)
         }
-        // const convertToURLs = (text) => {
-        //     var urlRegex = /(https?:\/\/[^\s]+)/g;
-        //     return text.replace(urlRegex, function (url) {
-        //         var aTag = document.createElement('a');
-        //         aTag.setAttribute('href', url);
-        //         aTag.innerText = url;
-        //         return aTag;
-        //     })
-        // }
         const userLink = "/user/" + this.props.username;
         return (
             <Fragment>
@@ -196,7 +167,31 @@ class MyProfile extends React.Component {
                 <Dialog open={this.state.showFriends} onClose={this.handleClose} aria-labelledby="simple-dialog-title">
                     <DialogTitle id="simple-dialog-title">Click on user to visit their profile</DialogTitle>
                     <div style={{ padding: "10px" }}>
-                        <FriendsList id={this.props.id}/>
+                        <FriendsList id={this.props.id} />
+                    </div>
+                </Dialog>
+
+                {/* Dialog for account options */}
+                <Dialog open={this.state.accountOptions} onClose={this.handleClose} aria-labelledby="simple-dialog-title">
+                    <DialogTitle id="simple-dialog-title">Choose an account option from here</DialogTitle>
+                    <div style={{ display: "flex", justifyContent: "center", textAlign:"center" }}>
+                        <div style={{ padding: "10px" }}>
+                            <Button variant="text" color="default" >
+                                <Link to="/settings" style={{ color: "grey" }}>
+                                    Account Settings
+                            </Link>
+                            </Button>
+                            <br />
+                            <Button variant="text" color="default" style={{ color: "teal" }} onClick={() => this.setState({ shareMenu: true })}>
+                                Share profile
+                            </Button>
+                            <br />
+                            <Button color="secondary"><Link to="/groups">My Groups</Link></Button>
+                            <br />
+                            <Button color="secondary" onClick={() => this.setState({ showFriends: true })}>Edit Friends</Button>
+                            <br />
+                            <Link to="/pages"><Button color="secondary" style={{ color: "purple" }}>My Pages</Button></Link>
+                        </div>
                     </div>
                 </Dialog>
 
@@ -235,40 +230,21 @@ class MyProfile extends React.Component {
                     </DialogContent>
                 </Dialog>
 
-                <Header />
-                <div className="profileBody">
-                    {this.state.imageSize ? <Img src={this.state.profilePicture} id="profileImgLarge" alt="Your MyProfile" onClick={this.toggleImageSize} /> : <Img src={this.state.profilePicture} id="profileImgSmall" alt="Your MyProfile" onClick={this.toggleImageSize} />}
+                {/* <Header /> */}
+                <div id="profileContainer">
+                    <Img src={this.state.profilePicture} id="profileImg" alt="Your Profile" onClick={this.openProfile} />
                     <p id="profileName">{this.state.name}</p>
                     <p id="profileUsername">@{this.state.username}</p>
-                    <div id="profileBio"><p>{this.state.bio}</p></div>
-                    <div className="text-center">
-                        <Button variant="text" color="default" >
-                            <Link to="/settings" style={{ color: "grey" }}>
-                                Account Settings
-                            </Link>
-                        </Button>
-                        <Button variant="text" color="default" style={{ color: "teal" }} onClick={()=>this.setState({shareMenu : true})}>
-                                Share profile
-                        </Button>
-                        <br />
-                        <Button color="secondary"><Link to="/groups">My Groups</Link></Button>
-                        <Button color="secondary" onClick={() => this.setState({ showFriends: true })}>Edit Friends</Button>
-                        <Link to="/pages"><Button color="secondary" style={{ color: "purple" }}>My Pages</Button></Link>
-                        <br />
-                        {/* <FormControl style={{width:"50%"}}>
-                            <InputLabel htmlFor="profile-settings-chooser">Profile Settings</InputLabel>
-                            <Select id='profile-settings-chooser' value={this.state.dropdownValue} onChange={(e) => this.handleDropdownChange(e)} label="Choose a value">
-                                <MenuItem value={1}>Edit Profile Picture</MenuItem>
-                                <MenuItem value={2}>Edit Bio</MenuItem>
-                                <MenuItem value={3}>Edit Username</MenuItem>
-                                <MenuItem value={4}>Edit Name</MenuItem>
-                                <MenuItem value={5}>Edit Email</MenuItem>
-                                <MenuItem value={6} onClick={this.props.logOut}>Log Out</MenuItem>
-                            </Select>
-                        </FormControl> */}
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <Button variant="contained" id="accountOptions" onClick={() => this.setState({ accountOptions: true })}>Account Options</Button>
                     </div>
                 </div>
-                <PostGrid owner="true" />
+                <div id="profileBody">
+                    <div className="text-center">
+                        <p id="profileBio">{this.props.bio}</p>
+                        <PostGrid owner="true" />
+                    </div>
+                </div>
                 <Bottom />
             </Fragment>
         );

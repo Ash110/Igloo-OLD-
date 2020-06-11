@@ -12,7 +12,7 @@ import LandingPage from './pages/LandingPage/LandingPage'
 import Feed from './pages/Feed/Feed';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
-import StartingTips from './pages/StartingTips/startingTips';
+// import StartingTips from './pages/StartingTips/startingTips';
 import PostPage from './pages/PostPage/PostPage';
 import PagePostPage from './pages/PagePostPage/PagePostPage';
 import MyProfile from './pages/MyProfile/MyProfile';
@@ -49,7 +49,7 @@ const App = (props) => {
 						<PrivateRoute exact path="/profile" component={MyProfile} />
 						<Route exact path="/login" component={Login} />
 						<Route exact path="/privacypolicy" component={PrivacyPolicy} />
-						<Route exact path="/welcome" component={StartingTips} />
+						{/* <Route exact path="/welcome" component={StartingTips} /> */}
 						<Route exact path="/help" component={Help} />
 						<Route exact path="/contactus" component={ContactUs} />
 						<Route exact path="/forgotpassword/:code" component={ForgotPassword} />

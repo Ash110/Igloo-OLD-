@@ -4,7 +4,7 @@
 }
 
 #lightHeader{
-    background: white;
+    background: rgb(255, 255, 255);
     width: 100%;
     padding: 10px;
     text-align: center;
@@ -13,6 +13,8 @@
     /* box-shadow: 0 5px 10px rgb(236, 236, 236); */
     z-index: 10;
     color: black;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
     /* color: #E23D3C; */
 }
 

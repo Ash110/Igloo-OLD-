@@ -77,8 +77,8 @@ class FriendRequestGroup extends React.Component {
         return (
             <Fragment>
                 <br/>
-                <h5 id="showMoreRequests">Follow Requests</h5>
                 <div id="friendsListGroup">
+                    <h5 id="showMoreRequests">Follow Requests</h5>
                     {friendRequestsRender}
                 </div>
                 <br />

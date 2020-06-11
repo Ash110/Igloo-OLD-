@@ -12,9 +12,24 @@ const router = express.Router();
 //@desc    Fetch the feed
 //access   Private
 
+compare = (a, b) => {
+    const timeA = a.publishTime;
+    const timeB = b.publishTime;
+
+    let comparison = 0;
+    if (timeA < timeB) {
+        comparison = 1;
+    } else if (timeA > timeB) {
+        comparison = -1;
+    }
+    return comparison;
+}
+
 router.post('/getFeed', auth, async (req, res) => {
-    const user = await User.findById(req.id);
+    const user = await User.findById(req.id).populate('feed', 'publishTime');
     const feed = user.feed;
+    feed.sort(compare)
+    console.log(feed)
     let mutedUsers = user.mutedUsers;
     var flag = 0;
     let allFeedPosts = []
@@ -30,7 +45,7 @@ router.post('/getFeed', auth, async (req, res) => {
         }
     }
     for (let i = 0; i < feed.length; i++) {
-        const post = await Post.findById(feed[i]).populate('permission', 'members');
+        const post = await Post.findById(feed[i]["_id"]).populate('permission', 'members');
         // let allMembers = []
         if (post) {
             if (!mutedUsers.includes(post.author.toString())) {
@@ -62,7 +77,7 @@ router.post('/getFeed', auth, async (req, res) => {
                 }
             }
         } else {
-            const post = await PagePost.findById(feed[i]).populate('author', 'name username');
+            const post = await PagePost.findById(feed[i]["_id"]).populate('author', 'name username');
             // let allMembers = []
             if (post) {
                 if (!mutedUsers.includes(post.author.username.toString())) {

@@ -15,14 +15,25 @@ const cookieKey = config.get('cookiesToken');
 //Initialise Middleware
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
-// app.use(bodyParser.json({ limit: '50mb', extended: true }));
+app.use(function (req, res, next) { req.headers.origin = req.headers.origin || req.headers.host; next(); })
 app.use(cookieParser(cookieKey));
+var allowedOrigins = ['http://localhost:5000', 'http://127.0.0.1:5000',
+'https://www.igloosocial.com','https://igloosocial.com','igloosocial.com', 'www.igloosocial.com'];
+app.use(cors({
+    origin: function (origin, callback) {
+        console.log(origin)
+        console.log(allowedOrigins.indexOf(origin))
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1 ) {
+            var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
+    credentials: true
+}));
 app.set('trust proxy', 1);
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "localhost:3000"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
 //Connect to DB
 connectToDatabase();
 // app.get('/', (req, res) => res.send('The API is running'));
@@ -38,7 +49,21 @@ app.use('/api/comments', require('./routes/api/comments'));
 app.use('/api/search', require('./routes/api/search'));
 app.use('/api/notifications', require('./routes/api/notifications'));
 app.use('/api/pages', require('./routes/api/pages'));
+app.use('/api/stats', require('./routes/api/stats'));
 
+
+//Mobile routes
+app.use('/mobile/users', require('./routes/mobile/users'));
+app.use('/mobile/friends', require('./routes/mobile/friends'));
+app.use('/mobile/posts', require('./routes/mobile/posts'));
+app.use('/mobile/profilePicture', require('./routes/mobile/profilepicture'));
+app.use('/mobile/groups', require('./routes/mobile/groups'));
+app.use('/mobile/feed', require('./routes/mobile/feed'));
+app.use('/mobile/comments', require('./routes/mobile/comments'));
+app.use('/mobile/search', require('./routes/mobile/search'));
+app.use('/mobile/notifications', require('./routes/mobile/notifications'));
+app.use('/mobile/pages', require('./routes/mobile/pages'));
+app.use('/mobile/stats', require('./routes/mobile/stats'));
 
 // if (process.env.NODE_ENV === 'production') {
     //Set static folder

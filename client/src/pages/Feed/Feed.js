@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { logOut } from '../../actions/authAction';
-import { Drawer, Avatar, Grid, Fab, Tabs, Tab } from '@material-ui/core';
-import {Link} from 'react-router-dom';
-// import SpeedDial from '@material-ui/lab/SpeedDial';
-// import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
+import { Drawer, Avatar, Grid, Fab, Tabs, Tab, Button, Paper, Dialog, DialogTitle } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
 import { CircularProgress, FormGroup, FormControlLabel, Switch, Typography, Box } from "@material-ui/core";
-// import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
 import EditIcon from '@material-ui/icons/Edit';
-// import TimelapseIcon from '@material-ui/icons/Timelapse';
 import axios from 'axios';
 
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -26,6 +26,78 @@ import PagePostUploader from '../../components/PagePostUploader/PagePostUploader
 import CustomAlert from '../../components/Alerts/Alert'
 
 import './Feed.css'
+
+function getSteps() {
+    return ['Welcome to Igloo', 'Create a group', 'Create A Page', 'Follow your friends','Create a new post', 'Change account settings'];
+}
+
+function getStepContent(step) {
+    switch (step) {
+        case 0:
+            return `Welcome to Igloo - the private, ad-free social media that respects your data. Experience a new way
+            to share your memories with the people who matter the most. Check out this small tutorial on how to use Igloo.`;
+        case 1:
+            return (
+                <div>
+                    A group is a set of your friends you choose to share with. You can create a group for family, one for work
+                    and as many more as you want. 
+                    When you create a new post, you can choose a group to share with, 
+                    and only members of that group will be able to see the post.
+                    <br/>
+                    <b>How do I create a group?</b>
+                    <br />Go to your profile page, and click on <i>Account Options -> My Groups</i> to manage your groups
+            </div>);
+        case 2:
+            return (
+                <div>
+                    Pages on Igloo are a public group of posts anyone can view. Ever wanted to create a blog for your photography, or hobbies?
+                    <br/>
+                    Now with Igloo, you don't need a different account for that. Just create a page for your hobby and share posts to that page. 
+                    The page is public and anyone can now view your skills!
+                    <br />
+                    <b>How do I create a Page?</b>
+                    <br />Go to your profile page, and click on <i>Account Options -> My Pages</i> to manage your pages.
+                </div>);
+        case 3:
+            return (
+                <div>
+                    Go to the search page and search for your friends. Invite as many of your friends to join Igloo - the more the merrier. 
+                </div>);
+        case 4:
+            return (
+                <div>
+                    <b>How do you create a new post?</b>
+                    <p>
+                        On the home page, click on the red button on the bottom right corner to create a new post. On igloo you have 3 kinds of posts - 
+                        <dl>
+                            <dt>Permanent Posts</dt>
+                            <dd>These posts are private posts that you share with your groups. Permanent posts are shown on your profile forever.</dd>
+                            <dt>Temporary Posts</dt>
+                            <dd>Temporary posts are also private posts that only members of the group you share with can view. However, these posts last only 24 hours.</dd>
+                            <dt>Page Posts</dt>
+                            <dd>Page Posts are posts you share with any page you have. To create a page post, you need to create a page first. These posts are public, appear on your page, but not your profile.</dd>
+                        </dl>
+                    </p>
+                </div>);
+        case 5:
+            return (
+                <div>
+                    <b>Upload a profile picture, change your bio and more...</b>
+                    <p>
+                        We're so glad to have you Igloo. Let's all get rid of the intrusive social media sites and make a shift. 
+                        <br/>
+                        To get started, complete your profile. Upload a profile picture, add to your bio, link your telegram account and much more. 
+                        Click on the link below to go to settings to complete your profile. 
+                        <br/><br/>
+                        <Button onClick={() => window.location.href="/settings"} variant="outlined" color="primary">
+                            Change account settings
+                        </Button>
+                    </p>
+                </div>);
+        default:
+            return 'Unknown step';
+    }
+}
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -58,9 +130,12 @@ class Feed extends React.Component {
         onlyPermanent: false,
         noPagePosts: false,
         tabValue: 0,
+        newUser: false,
+        activeStep: 0
 
     }
     componentDidMount() {
+
         const config = {
             headers: {
                 "Content-Type": "application/json",
@@ -69,9 +144,15 @@ class Feed extends React.Component {
         }
         axios.post('/api/feed/getFeed', {}, config)
             .then(async (res) => {
+                var newUser = false;
+                if (this.props.location.search === "?welcome=true") {
+                    newUser = true;
+                    window.history.pushState({}, document.title, "/");
+                    window.history.replaceState({}, document.title, "/");
 
+                }
                 const userImage = await getProfilePicture(res.data.userId);
-                this.setState({ feed: [...res.data.allFeedPosts], userImage, loaded: true });
+                this.setState({ feed: [...res.data.allFeedPosts], userImage, loaded: true, newUser });
             })
             .catch((err) => {
                 alert("There has been an error. Please try after a while");
@@ -86,6 +167,21 @@ class Feed extends React.Component {
         this.setState({ postDialogOpen: true, });
     }
 
+    handleNext = () => {
+        const activeStep = this.state.activeStep + 1;
+        this.setState({ activeStep });
+    };
+
+    handleBack = () => {
+        const activeStep = this.state.activeStep - 1;
+        this.setState({ activeStep });
+    };
+
+    handleReset = () => {
+        const activeStep = 0;
+        this.setState({ activeStep });
+    };
+
     createPostButton = () => {
         this.setState({ postDialogOpen: true, fabOpen: false, alert: "Dialog opened" });
     }
@@ -93,12 +189,8 @@ class Feed extends React.Component {
         this.setState({ tempPostDialog: true, fabOpen: false });
     }
     render() {
-        if (this.props.theme === 'light') {
-            var feedSettingsId = "feedSettingsLight"
-        } else {
-            feedSettingsId = "feedSettingsDark"
-        }
 
+        const steps = getSteps();
 
         if (!this.state.loaded) {
             return (<CircularProgress style={{ position: "absolute", left: "45%", top: "40%" }} />)
@@ -132,13 +224,13 @@ class Feed extends React.Component {
                 //Show everything
                 if ((!this.state.onlyTimed && !this.state.onlyPermanent) || (this.state.onlyTimed && this.state.onlyPermanent)) {
                     if (!rendered.includes(post.id)) {
-                        if(!this.state.noPagePosts){
+                        if (!this.state.noPagePosts) {
                             rendered.push(post.id);
                             if (post.isPagePost) {
                                 return <PagePost id={post.id} key={post.id} />
                             }
                             return (<Post id={post.id} key={post.id} isText={post.isText} isTemp={post.isTemp.toString()} />)
-                        }else{
+                        } else {
                             rendered.push(post.id);
                             if (post.isPagePost) {
                                 return <Fragment></Fragment>
@@ -148,7 +240,7 @@ class Feed extends React.Component {
                     } else {
                         return (<Fragment key={post.id}></Fragment>)
                     }
-                } 
+                }
                 //Show only timed posts 
                 else if (this.state.onlyTimed && !this.state.onlyPermanent) {
                     if (!rendered.includes(post.id) && post.isTemp) {
@@ -160,16 +252,16 @@ class Feed extends React.Component {
                     } else {
                         return (<Fragment key={post.id}></Fragment>)
                     }
-                //Show permanent posts only
+                    //Show permanent posts only
                 } else if (!this.state.onlyTimed && this.state.onlyPermanent) {
                     if (!rendered.includes(post.id) && !post.isTemp) {
-                        if(!this.state.noPagePosts){
+                        if (!this.state.noPagePosts) {
                             if (post.isPagePost) {
                                 return <PagePost id={post.id} key={post.id} />
                             }
                             rendered.push(post.id);
                             return (<Post id={post.id} key={post.id} isText={post.isText} isTemp={post.isTemp.toString()} />)
-                        }else{
+                        } else {
                             if (post.isPagePost) {
                                 return <Fragment></Fragment>
                             }
@@ -183,6 +275,59 @@ class Feed extends React.Component {
         return (
             <Fragment>
                 <Header />
+                <div>
+                    {this.state.newUser ?
+                        <Dialog onClose={() => this.setState({newUser : false})} aria-labelledby="simple-dialog-title" open={this.state.newUser}>
+                            <DialogTitle id="simple-dialog-title">Set backup account</DialogTitle>
+                            <Fragment>
+                                <Stepper activeStep={this.state.activeStep} orientation="vertical">
+                                    {steps.map((label, index) => (
+                                        <Step key={label}>
+                                            <StepLabel>{label}</StepLabel>
+                                            <StepContent>
+                                                <Typography>{getStepContent(index)}</Typography>
+                                                <div>
+                                                    <br/><br/>
+                                                    <div>
+                                                        <Button
+                                                            disabled={this.state.activeStep === 0}
+                                                            onClick={this.handleBack}
+                                                        >
+                                                            Back
+                                                    </Button>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={this.handleNext}
+                                                        >
+                                                            {this.state.activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            </StepContent>
+                                        </Step>
+                                    ))}
+                                </Stepper>
+                                {this.state.activeStep === steps.length && (
+                                    <Paper square elevation={0} style={{padding:"20px"}}>
+                                        <Typography>All steps completed - you&apos;re finished</Typography>
+                                        <br />
+                                        <Button onClick={this.handleReset}>
+                                            View tutorial again
+                                        </Button>
+                                        <br />
+                                        <br />
+                                        <Button onClick={this.setState({newUser : false})} variant="contained" color="primary">
+                                            Get started!
+                                        </Button>
+                                    </Paper>
+                                )}
+                            </Fragment>
+                        </Dialog>
+                        :
+                        <Fragment></Fragment>
+                    }
+                </div>
                 <div id="feedContainer">
                     <Drawer anchor="bottom" open={this.state.postDialogOpen} onClose={this.closeDialog} style={{ padding: "20px" }}>
                         <Tabs
@@ -206,9 +351,6 @@ class Feed extends React.Component {
                             <PagePostUploader />
                         </TabPanel>
                     </Drawer>
-                    <Drawer anchor="bottom" open={this.state.tempPostDialog} onClose={this.closeDialog} style={{ padding: "20px" }}>
-
-                    </Drawer>
                     <div id="userStuff">
                         <Grid container spacing={0}>
                             <Grid item xs={2} lg={1} sm={1} md={1}>
@@ -219,8 +361,9 @@ class Feed extends React.Component {
                             </Grid>
                         </Grid>
                         <br />
-                        <ExpansionPanel id="feedSettingsLight">
-                            <ExpansionPanelSummary
+                        <ExpansionPanel  id="feedSettingsLight">
+                            <ExpansionPanelSummary 
+                                style={{ boxShadow: "none", WebkitBoxShadow:"none", MozBoxShadow:"none", border:"none", background:"white" }}
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel1a-content"
                                 id="panel1a-header"
@@ -247,8 +390,8 @@ class Feed extends React.Component {
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                     </div>
-                    <CustomAlert 
-                        text="Introducing Pages! Create public pages for your hobby or creations, that can be shared with anyone. Click here to learn more and create a page!" 
+                    <CustomAlert
+                        text="Introducing Pages! Create public pages for your hobby or creations, that can be shared with anyone. Click here to learn more and create a page!"
                         link="/pages"
                         storageKey="newPage"
                     />

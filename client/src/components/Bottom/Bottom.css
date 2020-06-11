@@ -6,12 +6,14 @@
     position: fixed;
     background: white;
     width: 100%;
-    bottom: -2px;
-    padding: 15px;
+    bottom: 0px;
+    padding: 20px;
     text-align: center;
-    box-shadow: 0 -5px 10px rgb(236, 236, 236);
+    box-shadow: 0 -5px 10px rgb(221, 221, 221);
     z-index: 10;
     color: black;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 #darkBottom{
     position: fixed;

@@ -42,12 +42,13 @@ class Register extends React.Component {
             }
                 Axios.post('/api/users/register', { captchaValue,name: fullName, email, password, confirmPassword, username, accountType: "personal" }, config)
                     .then(()=>{
-                        window.location.href = "/welcome"
+                        window.location.href = "/?welcome=true"
                     })
                     .catch((err)=> {
                         let alerts = []
                         err.response.data.errors.forEach(err => alerts.push(err.msg));
                         this.setState({ alerts, submitState : 0 })
+                        window.scrollTo(0, 0);
                     })
                 // cookies.set('userToken', res.data.token, { path: '/'});
         }

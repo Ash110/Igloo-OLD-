@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import Img from 'react-image'
-import { ButtonGroup } from 'react-bootstrap'
 import { connect } from 'react-redux';
 import axios from 'axios';
 import './Profile.css';
@@ -11,7 +10,7 @@ import TelegramIcon from '@material-ui/icons/Telegram';
 import { getProfilePicture } from "../../functions/GetProfilePicture";
 import PostGrid from '../../components/PostsGrid/PostGrid'
 import Page404 from '../Page404/Page404'
-import { Dialog, DialogTitle, Button, CircularProgress } from '@material-ui/core'
+import { Dialog, DialogTitle, Button, CircularProgress, ButtonGroup } from '@material-ui/core'
 import FriendsList from '../../components/FriendsList/FriendsList'
 import PagesList from '../../components/PagesList/PagesList'
 
@@ -30,7 +29,8 @@ class Profile extends React.Component {
         exists: false,
         showFriends: false,
         showPages: false,
-        telegramUsername: null
+        telegramUsername: null,
+        showProfilePicture: false,
     }
     componentDidMount() {
         const userProfile = this.props.match.params.username;
@@ -136,7 +136,11 @@ class Profile extends React.Component {
             });
     }
     handleClose = () => {
-        this.setState({ showFriends: false, showPages: false })
+        this.setState({ showFriends: false, showPages: false, showProfilePicture: false })
+    }
+
+    openProfile = () => {
+        this.setState({ showProfilePicture: true })
     }
 
     muteUser = (username) => {
@@ -216,30 +220,31 @@ class Profile extends React.Component {
 
         const buttonGroup = () => {
             if (this.state.buttonText === "Remove Friend") {
-                return (<ButtonGroup id="profileEditButtonGroup">
-                    <Button variant="contained" color="secondary" onClick={this.removeFriend}>{this.state.buttonText}</Button>
-                </ButtonGroup>)
+                return (
+                    <Button onClick={this.removeFriend}>{this.state.buttonText}</Button>
+                )
             }
             else if (this.state.buttonText === "Add Friend") {
-                return (<ButtonGroup id="profileEditButtonGroup">
-                    <Button variant="contained" color="primary" onClick={sendRequest}>{this.state.buttonText}</Button>
-                </ButtonGroup>)
+                return (
+                    <Button onClick={sendRequest}>{this.state.buttonText}</Button>
+                )
             }
             else if (this.state.buttonText === "Requested!") {
-                return (<ButtonGroup id="profileEditButtonGroup">
-                    <Button variant="contained" color="#1a1b1c" onClick={removeRequest}>{this.state.buttonText}</Button>
-                </ButtonGroup>)
+                return (
+                    <Button onClick={removeRequest}>{this.state.buttonText}</Button>
+                )
             } else if (this.state.buttonText === "Accept Request") {
-                return (<ButtonGroup id="profileEditButtonGroup">
-                    <Button variant="contained" style={{ backgroundColor: "#8fff9e" }} onClick={this.acceptRequest}>Accept friend request</Button>
-                    <br /><br />
-                    <Button variant="contained" style={{ backgroundColor: "#fd8080" }} onClick={this.rejectRequest}>Decline friend request</Button>
-                </ButtonGroup>)
+                return (
+                    <Fragment>
+                        <Button variant="contained" style={{ backgroundColor: "#8fff9e" }} onClick={this.acceptRequest}>Accept friend request</Button>
+                        <Button variant="contained" style={{ backgroundColor: "#fd8080" }} onClick={this.rejectRequest}>Decline friend request</Button>
+                    </Fragment>
+                )
             }
             else {
-                return (<ButtonGroup id="profileEditButtonGroup">
+                return (
                     <Button variant="contained" color="#1a1b1c" ><CircularProgress color="secondary" /></Button>
-                </ButtonGroup>)
+                )
             }
         }
         if (!this.state.loaded) {
@@ -258,22 +263,26 @@ class Profile extends React.Component {
                         <FriendsList id={this.state.id} />
                     </div>
                 </Dialog>
+                <Dialog open={this.state.showProfilePicture} onClose={this.handleClose} aria-labelledby="simple-dialog-title">
+                    <div style={{ padding: "10px" }}>
+                        <Img src={this.state.profilePicture} alt="profile" />
+                    </div>
+                </Dialog>
                 <Dialog open={this.state.showPages} onClose={this.handleClose} aria-labelledby="simple-dialog-title">
                     <DialogTitle id="simple-dialog-title">Click on a page to visit</DialogTitle>
                     <div style={{ padding: "10px" }}>
                         <PagesList id={this.state.id} />
                     </div>
                 </Dialog>
-                <Header />
-                <div className="profileBody">
-                    <Img src={this.state.profilePicture} id="profileImg" alt="Your Profile" />
+                {/* <Header /> */}
+                <div id="profileContainer">
+                    <Img src={this.state.profilePicture} id="profileImg" alt="Your Profile" onClick={this.openProfile} />
                     <p id="profileName">{this.state.name}</p>
                     <p id="profileUsername">@{this.state.username}</p>
-                    <p id="profileBio">{this.state.bio}</p>
                     <div className="text-center">
                         {this.state.pages.length > 0 ?
                             <Fragment>
-                                <Button variant="text" color="default" onClick={() => this.setState({ showPages: true })}>
+                                <Button variant="text" id="pageBtn" color="default" onClick={() => this.setState({ showPages: true })}>
                                     {this.state.pages.length} Pages
                                 </Button>
                                 <br />
@@ -282,42 +291,44 @@ class Profile extends React.Component {
                             <Fragment></Fragment>
                         }
                         {this.state.buttonText === "Remove Friend" ?
-                            <Button variant="text" color="default" onClick={() => this.setState({ showFriends: true })}>
+                            <Button variant="text" id="friendsBtn" color="default" onClick={() => this.setState({ showFriends: true })}>
                                 {this.state.numberOfFriends} Friends
                         </Button>
                             :
                             <Fragment></Fragment>
                         }
-                        <br /><br />
-                        {this.state.buttonText === "Remove Friend" && this.state.telegramUsername ?
-                            <Fragment>
+                    </div>
+                </div>
+                <div id="profileBody">
+                    <div className="text-center">
+                        <p id="profileBio">{this.state.bio}</p>
+                        <br />
+                        <ButtonGroup color="primary" aria-label="outlined primary button group">
+                            {this.state.buttonText === "Remove Friend" && this.state.telegramUsername ?
                                 <Button
-                                    variant="contained"
-                                    style={{ backgroundColor: "#0088cc", color: "white" }}
                                     onClick={() => this.textUser(this.state.telegramUsername)}>
                                     Direct Message <TelegramIcon style={{ marginLeft: "10px" }} />
                                 </Button>
-                                <br /><br />
-                            </Fragment>
-                            :
-                            <Fragment></Fragment>
-                        }
-                        {buttonGroup()}
+                                :
+                                <Fragment></Fragment>
+                            }
+                            {buttonGroup()}
+                            {this.state.buttonText === "Remove Friend" && this.state.isMuted ?
+                                <Button onClick={() => this.unmuteUser(this.state.username)}>
+                                    Unmute User
+                            </Button>
+                                :
+                                <Fragment></Fragment>
+                            }
+                            {this.state.buttonText === "Remove Friend" && !this.state.isMuted ?
+                                <Button onClick={() => this.muteUser(this.state.username)}>
+                                    Mute User
+                            </Button>
+                                :
+                                <Fragment></Fragment>
+                            }
+                        </ButtonGroup>
                         <br />
-                        {this.state.buttonText === "Remove Friend" && this.state.isMuted ?
-                            <Button variant="contained" color="primary" onClick={() => this.unmuteUser(this.state.username)}>
-                                Unmute User
-                            </Button>
-                            :
-                            <Fragment></Fragment>
-                        }
-                        {this.state.buttonText === "Remove Friend" && !this.state.isMuted ?
-                            <Button variant="contained" color="default" onClick={() => this.muteUser(this.state.username)}>
-                                Mute User
-                            </Button>
-                            :
-                            <Fragment></Fragment>
-                        }
                     </div>
                     {this.state.buttonText === "Remove Friend" ? <PostGrid owner={this.state.userProfile} /> : <Fragment></Fragment>}
                 </div>

@@ -8,11 +8,10 @@ import Img from 'react-image';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import SendIcon from '@material-ui/icons/Send';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import TwitterIcon from '@material-ui/icons/Twitter';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import LaunchIcon from '@material-ui/icons/Launch';
 import EmailIcon from '@material-ui/icons/Email';
+import CommentIcon from '@material-ui/icons/Comment';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SpeakerNotesOffIcon from '@material-ui/icons/SpeakerNotesOff';
@@ -71,8 +70,8 @@ class Post extends Component {
                     const author = res.data.post.author.name;
                     const authorImage = await getProfilePicture(res.data.post.author._id)
                     const authorUsername = res.data.post.author.username;
-                    // const image = await getPostImage(this.props.id)
-                    const image = "data:image/png;base64," + Buffer.from(await getPostImage(this.props.id), 'binary').toString('base64')
+                    const imageFetch = await getPostImage(this.props.id).catch((err) => this.setState({ valid: false, loaded: true }))
+                    const image = "data:image/png;base64," + Buffer.from(imageFetch, 'binary').toString('base64')
                     const time = new Date(res.data.post.publishTime);
                     const caption = res.data.post.caption;
                     const comments = res.data.post.comments;
@@ -88,7 +87,7 @@ class Post extends Component {
                     }, 100)
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.setState({ valid: false, loaded: true })
                 })
         } else {
             axios.post('/api/posts/getPostDetails', { postId: this.props.id, isText: this.props.isText, isTemp: true }, config)
@@ -114,8 +113,8 @@ class Post extends Component {
                             const author = res.data.post.author.name;
                             const authorImage = await getProfilePicture(res.data.post.author._id)
                             const authorUsername = res.data.post.author.username;
-                            // const image = await getPostImage(this.props.id)
-                            const image = "data:image/png;base64," + Buffer.from(await getPostImage(this.props.id), 'binary').toString('base64')
+                            const imageFetch = await getPostImage(this.props.id).catch((err) => this.setState({ valid: false, loaded: true }))
+                            const image = "data:image/png;base64," + Buffer.from(imageFetch, 'binary').toString('base64')
                             const time = new Date(res.data.post.publishTime).addHours(24);
                             const caption = res.data.post.caption;
                             const comments = res.data.post.comments;
@@ -134,7 +133,7 @@ class Post extends Component {
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    this.setState({valid : false, loaded : true})
                 })
         }
     }
@@ -447,7 +446,7 @@ class Post extends Component {
                                             aria-label="show more"
                                             style={{ outlineStyle: "none" }}
                                         >
-                                            {this.state.expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                            {this.state.expanded ? <CommentIcon /> : <CommentIcon />}
                                         </IconButton>
                                     </Fragment>
                             }
@@ -476,7 +475,6 @@ class Post extends Component {
                             </CardContent>
                         </Collapse>
                     </Card>
-                    <Divider variant="middle" />
                 </div>
             )
         }
@@ -631,7 +629,7 @@ class Post extends Component {
                                     aria-label="show more"
                                     style={{ outlineStyle: "none" }}
                                 >
-                                    {this.state.expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                    {this.state.expanded ? <CommentIcon /> : <CommentIcon />}
                                 </IconButton>
                                 <br /><br />
                             </CardActions>
@@ -791,7 +789,7 @@ class Post extends Component {
                                     aria-label="show more"
                                     style={{ outlineStyle: "none" }}
                                 >
-                                    {this.state.expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                                    {this.state.expanded ? <CommentIcon /> : <CommentIcon />}
                                 </IconButton>
                                 <br /><br />
                             </CardActions>
@@ -818,7 +816,6 @@ class Post extends Component {
                                 </CardContent>
                             </Collapse>
                         </Card>
-                        <Divider variant="middle" />
                     </div>
                 )
             }

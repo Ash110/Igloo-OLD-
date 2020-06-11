@@ -1,23 +1,17 @@
 #landingPageBody {
     position: absolute;
     top: 0;
-    background-image: url('../../assets/5.jpg');
+    /* background: rgb(45, 183, 247); */
+    background-color: #d7f6fc;
+    /* background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b6f2ff' fill-opacity='0.4'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
+    background: linear-gradient(rgba(255, 255, 255, .4), rgba(255, 255, 255, .4)),
+    url('../../assets/bg_1.jpg');
     background-repeat: repeat;
-    height: 240%;
+
+    height: auto;
     width: 100%;
 }
-#landingPageContainer{
-    width: 95%;
-    margin-left: 2.5%;
-    /* background-color: rgba(255, 255, 255, 0.945); */
-    background-image: linear-gradient(-45deg, rgb(171, 215, 250,0.9), rgba(181, 236, 220, 0.9));
-    border-radius: 5px;
-    padding: 20px;
-    padding-bottom: 50px;
-    margin-top: 50px;
-    box-shadow: grey 0 10px 20px;
-    /* opacity: 0.9; */
-}
+
 #landingTitle{
     font-family: bebas;
     text-align: center;
@@ -25,11 +19,52 @@
     margin-top: 50px;
 }
 
+#strikedFeatures{
+    text-align: center;
+    text-decoration: line-through red;
+    padding: 10px;
+    /* color:red; */
+}
+#leftSide{
+    background: white;
+    width: 90%;
+    margin-left: 5%;
+    padding: 50px;
+    margin-top: 20px;
+    box-shadow: rgb(131, 131, 131) 0 10px 20px;
+    border-radius: 10px;
+    background-image: url('../../assets/018-p-1080.png');
+    
+}
+
+#acceptedFeatures{
+    text-align: center;
+    text-decoration: rgb(0, 255, 85) underline;
+    padding: 10px;
+
+}
+
+#footer{
+    width: 100%;
+    background: white;
+    text-align: center;
+    padding: 20px;
+    margin-top:30px;
+}
+
+#strikedFeaturesContainer {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.5rem;
+}
+
+
 #landingCaption{
     text-align: center;
     font-size: 1rem;
     margin-top: 10px;
     font-family: 'Work Sans',sans-serif;
+    border: white 1px;
 }
 .landingPageBlocks{
     /* background: white; */
@@ -39,8 +74,9 @@
     border-radius: 10px;
 }
 #landingPageImage1{
-    width : 100%;
-    left: 40%;
+    width: 100%;
+    height: auto;
+    padding: 50px;
 }
 
 #landingButtonsContainer{
@@ -50,15 +86,30 @@
     align-items: center;
     align-content: center;
 }
-.landingPageCard{
+.landingPageCardText{
     width: 100%;
-    /* background-image: linear-gradient(-45deg, rgba(241, 142, 142, 0.9), rgba(236, 181, 181, 0.9)); */
-    border : 1px grey solid;
-    border-radius: 5px;
     padding: 20px;
     margin-top: 20px;
-    text-align: center;
+    /* text-align: center; */
 }
+
+.landingPageCard {
+    background-color: white;
+    width: 90%;
+    margin-left: 5%;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 30px;
+    box-shadow: 0 10px 20px rgb(175, 175, 175);
+}
+
+#featureImages{
+    float: right;
+    height: 80px;
+    width: 80px;
+    margin-top: 20px;
+}
+
 .landinPageCardTop{
     font-size: 1.5rem;
 }
@@ -66,9 +117,34 @@
     font-size: 0.7rem;
     color : rgb(97, 97, 97);
 }
+
+#attribution{
+    font-size: 0.5rem;
+}
+
 @media screen and (min-width: 768px) {
+    #leftSide {
+        background: white;
+        width: 60%;
+        margin-left: 20%;
+        padding: 50px;
+        margin-top: 20px;
+        box-shadow: rgb(131, 131, 131) 0 10px 20px;
+        border-radius: 10px;
+        background: linear-gradient(rgba(255, 255, 255, .7), rgba(255, 255, 255, .7)),
+        url('../../assets/009.png');
+    }
+
     #landingPageContainer {
         width: 90%;
         margin-left: 5%;
+    }
+    .landingPageCard {
+        background-color: white;
+        width: 60%;
+        margin-left: 20%;
+    }
+    #landingPageImage1 {
+        margin-left: 200px;
     }
 }

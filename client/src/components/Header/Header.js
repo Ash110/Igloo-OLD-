@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import { connect } from 'react-redux';
 import { logOut } from '../../actions/authAction';
 import './Header.css'
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -109,19 +109,21 @@ class Header extends Component {
                         </List>
                     </div>
                 </SwipeableDrawer >
-                <Grid container spacing={0}>
-                    <Grid item xs={2}>
-                        {/* {themeIcon} */}
-                    </Grid>
-                    <Grid item xs={8} id="lightHeader">
-                        <Link to="/" style= {{ color : "black"}}>
-                            IGLOO
+                <div id="lightHeader">
+                    <Grid container spacing={0} style={{ background: "white" }}>
+                        <Grid item xs={2}>
+                            {/* {themeIcon} */}
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Link to="/" style={{ color: "black" }}>
+                                IGLOO
                         </Link>
-            </Grid>
-                    <Grid item xs={2}>
-                        <MenuIcon id="headerMenuIcon" onClick={() => this.setState({ drawerOpen: true })} />
+                        </Grid>
+                        <Grid item xs={2}>
+                            <MenuIcon id="headerMenuIcon" onClick={() => this.setState({ drawerOpen: true })} />
+                        </Grid>
                     </Grid>
-                </Grid>
+                </div>
             </Fragment>
         );
     }

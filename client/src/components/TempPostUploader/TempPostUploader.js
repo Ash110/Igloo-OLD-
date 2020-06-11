@@ -20,6 +20,7 @@ class TempPostUploader extends Component {
             // width: 100,
             // height: 100,
             unit: "px",
+            // aspect: 1 / 1,
         },
         croppedImageUrl: "",
         caption: "",

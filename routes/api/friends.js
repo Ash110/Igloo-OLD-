@@ -12,29 +12,33 @@ const router = express.Router();
 //@desc    Fetch profile details of a user
 //access   Private
 router.post('/getProfile', auth, async (req, res) => {
-    const profileUsername = req.body.username.toLowerCase();
-    try {
-        const user = await User.findOne({ username: profileUsername }).populate('pages', 'name username');
-        if (user) {
-            if (user._id.toString() === req.id) {
-                res.status(200).send("Same");
+    if (req.body.username) {
+        const profileUsername = req.body.username.toLowerCase();
+        try {
+            const user = await User.findOne({ username: profileUsername }).populate('pages', 'name username');
+            if (user) {
+                if (user._id.toString() === req.id) {
+                    res.status(200).send("Same");
+                } else {
+                    const currentUser = await User.findById(req.id);
+                    const { id, name, username, profilePicture, bio, telegramUsername } = user;
+                    const isFriend = currentUser.friends.includes(id);
+                    const isMuted = currentUser.mutedUsers.includes(id.toString())
+                    const isRequested = user.requests.includes(req.id);
+                    const hasRequestedMe = currentUser.requests.includes(id);
+                    const numberOfFriends = user.friends.length;
+                    const pages = user.pages || [];
+                    res.status(200).json({ id, name, username, profilePicture, isMuted, hasRequestedMe, telegramUsername, bio, isFriend, isRequested, numberOfFriends, exists: true, pages });
+                }
             } else {
-                const currentUser = await User.findById(req.id);
-                const { id, name, username, profilePicture, bio, telegramUsername } = user;
-                const isFriend = currentUser.friends.includes(id);
-                const isMuted = currentUser.mutedUsers.includes(id.toString())
-                const isRequested = user.requests.includes(req.id);
-                const hasRequestedMe = currentUser.requests.includes(id);
-                const numberOfFriends = user.friends.length;
-                const pages = user.pages || [];
-                res.status(200).json({ id, name, username, profilePicture, isMuted, hasRequestedMe, telegramUsername, bio, isFriend, isRequested, numberOfFriends, exists: true, pages });
+                res.status(200).json({ exists: false });
             }
-        } else {
-            res.status(200).json({ exists: false });
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Server Error");
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Server Error");
+    } else {
+        res.status(400).send("No username");
     }
 });
 
@@ -42,18 +46,22 @@ router.post('/getProfile', auth, async (req, res) => {
 //@desc    Send a friend request
 //access   Private
 router.post('/sendRequest', auth, async (req, res) => {
-    const profileUsername = req.body.username.toLowerCase();
-    const user = await User.findOne({ username: profileUsername });
-    try {
-        let requests = [...user.requests, req.id];
-        if (user.emailPreferences.friendRequestEmails) {
-            const sender = await User.findById(req.id);
-            sendFriendRequestMail(user.email, user.username, sender.name);
+    if (req.body.username) {
+        const profileUsername = req.body.username.toLowerCase();
+        const user = await User.findOne({ username: profileUsername });
+        try {
+            let requests = [...user.requests, req.id];
+            if (user.emailPreferences.friendRequestEmails) {
+                const sender = await User.findById(req.id);
+                sendFriendRequestMail(user.email, user.username, sender.name);
+            }
+            await user.updateOne({ requests, newNotifications: true });
+            res.status(200).send("Request Sent!");
+        } catch (err) {
+            console.log(err);
+            res.status(401).send("Failed");
         }
-        await user.updateOne({ requests, newNotifications: true });
-        res.status(200).send("Request Sent!");
-    } catch (err) {
-        console.log(err);
+    } else {
         res.status(401).send("Failed");
     }
 });
@@ -62,31 +70,35 @@ router.post('/sendRequest', auth, async (req, res) => {
 //@desc    Remove the request
 //access   Private
 router.post('/removeRequest', auth, async (req, res) => {
-    const profileUsername = req.body.username.toLowerCase();
-    const user = await User.findOne({ username: profileUsername });
-    try {
-        let requests = [...user.requests];
-        let index = -1;
-        for (let i = 0; i < requests.length; i++) {
-            let item = requests[i];
-            if (item == req.id) {
-                index = i;
-            }
-        }
-        console.log(index)
-        if (index > -1) {
-            requests.splice(index, 1);
-        }
-        await user.updateOne({ requests });
+    if (req.body.username) {
+        const profileUsername = req.body.username.toLowerCase();
+        const user = await User.findOne({ username: profileUsername });
         try {
-            // const testUser = await User.findOne({ username: profileUsername }).populate('requests', 'name username profilePicture')
-            res.status(200).send("Request Removed!");
+            let requests = [...user.requests];
+            let index = -1;
+            for (let i = 0; i < requests.length; i++) {
+                let item = requests[i];
+                if (item == req.id) {
+                    index = i;
+                }
+            }
+            console.log(index)
+            if (index > -1) {
+                requests.splice(index, 1);
+            }
+            await user.updateOne({ requests });
+            try {
+                // const testUser = await User.findOne({ username: profileUsername }).populate('requests', 'name username profilePicture')
+                res.status(200).send("Request Removed!");
+            } catch (err) {
+                console.log(err);
+                res.status(401).send("Failed");
+            }
         } catch (err) {
             console.log(err);
             res.status(401).send("Failed");
         }
-    } catch (err) {
-        console.log(err);
+    } else {
         res.status(401).send("Failed");
     }
 });
@@ -126,8 +138,16 @@ router.post('/acceptRequest', auth, async (req, res) => {
         await notification.save();
         let userNotifications = [...user2.notifications];
         userNotifications.unshift(notification);
-        await user.updateOne({ friends });
-        await user2.updateOne({ friends: friends2, notifications: userNotifications, newNotifications: true });
+        let userFeed = [...user.feed];
+        let user2Feed = [...user2.feed];
+        user.posts.map((post) => {
+            user2Feed.push(post)
+        })
+        user2.posts.map((post) => {
+            userFeed.push(post)
+        })
+        await user.updateOne({ friends, feed : userFeed });
+        await user2.updateOne({ friends: friends2, notifications: userNotifications, newNotifications: true, feed : user2Feed });
         //Remove the request from the list 
         let requests = [...user.requests];
         let index = -1;
@@ -205,33 +225,48 @@ router.post('/rejectRequest', auth, async (req, res) => {
 //@desc    Remove a friend from all groups
 //access   Private
 router.post('/removeFriend', auth, async (req, res) => {
-    try {
-        const user1 = await User.findById(req.id);
-        const user2 = await User.findOne({ username: req.body.username.toLowerCase() })
-        if (user1 && user2) {
-            await User.update({ _id: user1._id }, { "$pull": { "friends": user2._id } }, { safe: true, multi: true }, function (err, obj) {
-                // console.log(obj);
-            });
-            await User.update({ _id: user2._id }, { "$pull": { "friends": user1._id } }, { safe: true, multi: true }, function (err, obj) {
-                // console.log(obj);
-            });
-            user1.groups.map(async (group) => {
-                await Group.update({ _id: group }, { "$pull": { "members": user2._id } }, { safe: true, multi: true }, function (err, obj) {
+    if (req.body.username) {
+        try {
+            const user1 = await User.findById(req.id);
+            const user2 = await User.findOne({ username: req.body.username.toLowerCase() })
+            if (user1 && user2) {
+                await User.updateOne({ _id: user1._id }, { "$pull": { "friends": user2._id } }, { safe: true, multi: true }, function (err, obj) {
                     // console.log(obj);
                 });
-            });
-            user2.groups.map(async (group) => {
-                await Group.update({ _id: group }, { "$pull": { "members": user1._id } }, { safe: true, multi: true }, function (err, obj) {
+                await User.updateOne({ _id: user2._id }, { "$pull": { "friends": user1._id } }, { safe: true, multi: true }, function (err, obj) {
                     // console.log(obj);
                 });
-            });
-            res.status(200).send("Success!");
-        } else {
-            res.status(401).send("Failed");
+                user1.groups.map(async (group) => {
+                    await Group.updateOne({ _id: group }, { "$pull": { "members": user2._id } }, { safe: true, multi: true }, function (err, obj) {
+                        // console.log(obj);
+                    });
+                });
+                user2.groups.map(async (group) => {
+                    await Group.updateOne({ _id: group }, { "$pull": { "members": user1._id } }, { safe: true, multi: true }, function (err, obj) {
+                        // console.log(obj);
+                    });
+                });
+                user2.posts.map(async (post) => {
+                    await User.updateOne({ _id: user1._id }, { "$pull": { "feed": post._id } }, { safe: true, multi: true }, function (err, obj) {
+                        // console.log(obj);
+                    });
+                });
+                user1.posts.map(async (post) => {
+                    await User.updateOne({ _id: user2._id }, { "$pull": { "feed": post._id } }, { safe: true, multi: true }, function (err, obj) {
+                        // console.log(obj);
+                    });
+                });
+                console.log("Successfully Removed");
+                res.status(200).send("Success!");
+            } else {
+                res.status(401).send("Failed");
+            }
+        } catch (err) {
+            console.log(err);
+            res.status(500).send("Internal Server Error");
         }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Internal Server Error");
+    }else{
+        res.status(400).send("No username");
     }
 });
 

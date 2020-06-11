@@ -12,7 +12,7 @@ export default class PostGridPost extends Component {
     state = {
         loaded: false,
         imageUrl: "",
-        valid : true
+        valid: true
     }
     componentDidMount = async () => {
         // const imageUrl = "data:image/png;base64," + btoa(String.fromCharCode.apply(null, await getPostImage(this.props.id)));
@@ -24,7 +24,7 @@ export default class PostGridPost extends Component {
                 }
             })
             .catch((err) => {
-                this.setState({valid : false, loaded : true})
+                this.setState({ valid: false, loaded: true })
             })
     }
     render() {
@@ -41,19 +41,15 @@ export default class PostGridPost extends Component {
                 </Fragment>
             )
         }
-        if(!this.state.valid){
-            return(<Fragment></Fragment>)
+        if (!this.state.valid) {
+            return (<Fragment></Fragment>)
         }
         // this.props.style === "grid" ? size = 4 : size = 12;
         return (
             <Fragment>
-                <Grid item xs={1} sm={2} md = {3} lg={3}></Grid>
-                <Grid item xs={10} sm={8} md={6} lg={6}>
-                    <Link to={`/post/${this.props.id}`}>
-                        <Img src={this.state.imageUrl} alt="A user post" id="postGridImage" />
-                    </Link>
-                </Grid>
-                <Grid item xs={1} sm={2} md={3} lg={3}></Grid>
+                <Link to={`/post/${this.props.id}`}>
+                    <Img src={this.state.imageUrl} alt="A user post" id="postGridImage" />
+                </Link>
             </Fragment>
         )
     }

@@ -1,5 +1,5 @@
 #postGrid{
-    margin-top: 400px;
+    margin-top: 50px;
     margin-bottom: 30px;
 
 }
@@ -10,7 +10,7 @@
 @media screen and (min-width: 768px) {
     #postGrid{
         padding: 100px;
-        margin-top: 300px;
+        margin-top: 25px;
     }
     #postGridFriend {
         padding: 100px;

@@ -41,7 +41,8 @@ class Register extends React.Component {
                 .catch((err) => {
                     let alerts = []
                     err.response.data.errors.map(err => alerts.push(err.msg));
-                    this.setState({ alerts, status : 0 })
+                    this.setState({ alerts, status : 0 });
+                    window.scrollTo(0, 0);
                 })
                 // cookies.set('userToken', res.data.token, { path: '/' });
 

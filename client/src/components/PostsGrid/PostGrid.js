@@ -44,41 +44,36 @@ export default class PostGrid extends Component {
             var gridPosts = this.state.posts.map((post) => {
                 if (!post.isTemp) {
                     return (
-                        <Fragment>
-                            <PostGridPost key={post.id} id={post.id} style="list" />
-                            <br />
-                            <br />
-                        </Fragment>
+                        <Grid item xs={4}>
+                            <PostGridPost key={post.id} id={post.id} />
+                        </Grid>
                     )
                 }
             })
             if (this.state.posts.length > 0) {
                 return (
-                    <div>
-                        <Grid container spacing={0} id="postGrid">
-                            {gridPosts}
-                        </Grid>
-                    </div>
+                    <Grid container spacing={1} id="postGrid">
+                        {gridPosts}
+                    </Grid>
                 )
             } else {
                 return (<h4 id="postGrid" style={{ textAlign: "center" }}>Looks empty here <br /> Start your journey today!</h4>)
             }
         }
         else {
-            gridPosts = this.state.posts.map((post) => {
+            gridPosts = this.state.posts.map((post, index) => {
                 if (!post.isTemp) {
                     return (
-                        <Fragment>
+                        <Grid item xs={4} key={index}>
                             <PostGridPost key={post.id} id={post.id} style={this.state.style} />
-                            <br />
-                        </Fragment>
+                        </Grid>
                     )
                 }
             })
             if (this.state.posts.length > 0) {
                 return (
                     <Fragment>
-                        <Grid container spacing={0} id="postGridFriend">
+                        <Grid container spacing={1} id="postGridFriend">
                             {gridPosts}
                         </Grid>
                     </Fragment>

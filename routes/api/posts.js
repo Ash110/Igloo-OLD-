@@ -238,11 +238,14 @@ router.post('/getPostDetails', auth, async (req, res) => {
             if (req.id.toString() === post.author._id.toString()) {
                 isAuthor = true
             }
+            
             var liked = false;
             if (post.likes.includes(req.id)) {
                 liked = true;
             }
             res.status(200).json({ post, liked, isAuthor });
+        }else{
+            res.status(404).send("Post not found")
         }
     } else {
         if(req.body.isText){
@@ -263,6 +266,8 @@ router.post('/getPostDetails', auth, async (req, res) => {
                 } else {
                     res.status(200).json({ valid: false });
                 }
+            } else {
+                res.status(404).send("Post not found")
             }
         }else{
             const post = await Post.findById(req.body.postId).populate('author', 'name username');
@@ -282,6 +287,8 @@ router.post('/getPostDetails', auth, async (req, res) => {
                 } else {
                     res.status(200).json({ valid: false });
                 }
+            } else {
+                res.status(404).send("Post not found")
             }
         }
     }
@@ -351,7 +358,7 @@ router.post('/getPostGrid', auth, async (req, res) => {
             const user = await User.findById(req.id).populate('posts', 'likes publishTime isText isTemp');
             userPosts = []
             user.posts.map((post) => {
-                if (!post.isText) {
+                if (!post.isTemp) {
                     userPosts.push({ id: post._id, likes: post.likes.length, time: post.publishTime, isTemp : post.isTemp });
                 }
             });

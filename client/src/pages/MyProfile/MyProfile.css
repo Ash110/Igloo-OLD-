@@ -1,68 +1,113 @@
-body{
-    background-color:white ;
+html {
+    height: 100%;
 }
-.profileBody{
-    width: 100%;
-    height: 100px;
-    background: white;
+
+body {
+    background: rgb(241, 241, 241);
 }
-#profileImgSmall{
-    width: 200px;
-    height: 200px;
+
+
+
+#accountOptions{
+    background:none;
+    box-shadow: none;
+    color:white;
+    border:white 2px solid;
+    text-align: center;
+    padding: 7px;
+}
+
+#pageBtn {
+    color: white;
+}
+
+#friendsBtn {
+    color: white;
+}
+
+#profileImg {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 80px;
+    height: 80px;
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
     border-radius: 100000px;
     transition: 0.3s;
-    -moz-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
-}
-#profileImgLarge{
-    width: 250px;
-    height: 250px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    border-radius: 10px;
-    transition: 0.3s;
-    -moz-transition: all 0.5s;
-    -o-transition: all 0.5s;
-    -webkit-transition: all 0.5s;
-    transition: all 0.5s;
 }
 
-#profileName{
+#profileName {
     text-align: center;
     font-size: 2rem;
-    margin-top: 20px;
+    margin-top: 30px;
+    color: white;
 }
-#profileUsername{
+
+#profileUsername {
     text-align: center;
     margin-top: 0px;
+    color: white;
 }
-#profileEditButtonGroup{
+
+#profileEditButtonGroup {
     display: block;
     width: 100%;
     left: auto;
     right: auto;
 }
-#profileBio{
+
+#profileBio {
     text-align: center;
     margin-top: 0px;
-    white-space: pre-wrap;
+    white-space: pre-line;
 }
+
 @media screen and (min-width: 768px) {
-    #profileImg:hover {
-        width: 400px;
-        height: 400px;
+    
+
+    #profileName {
+        text-align: center;
+        font-size: 4rem;
+        margin-top: 50px;
+        color: white;
+    }
+
+    #profileUsername {
+        text-align: center;
+        margin-top: 0px;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    #profileEditButtonGroup {
         display: block;
-        margin-left: auto;
-        margin-right: auto;
+        width: 100%;
+        left: auto;
+        right: auto;
+    }
+
+    #profileBio {
+        text-align: center;
+        margin-top: 0px;
+    }
+
+    #pageBtn {
+        font-size: 1.1rem;
+    }
+
+    #friendsBtn {
+        font-size: 1.1rem;
+    }
+    #accountOptions {
+        background: none;
+        box-shadow: none;
+        color: white;
+        border: white 2px solid;
+        text-align: center;
+        padding: 20px;
         margin-top: 20px;
-        border-radius: 100000px;
     }
 }

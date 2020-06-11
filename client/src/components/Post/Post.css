@@ -1,7 +1,7 @@
 #postContainer{
     position: relative;
-    width: 95%;
-    margin-left: 2.5%;
+    width: 90%;
+    margin-left: 5%;
     margin-top: 20px;
 }
 #postCardDark {
@@ -40,7 +40,9 @@
 #postImage{
     /* position: relative; */
     left: 0px;
-    width: 100%;
+    width: auto;
+    border-radius: 10px;
+    box-shadow: 0 10px 10px rgb(197, 197, 197);
 }
 #textCard{
     background: rgb(253, 243, 243);

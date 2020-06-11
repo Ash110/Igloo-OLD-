@@ -1,2 +1,14 @@
 
 .DS_Store
+
+routes/mobile/
+
+middleware/mobileAuth.js
+
+config/
+
+email/
+
+client/src/config.js
+
+images/

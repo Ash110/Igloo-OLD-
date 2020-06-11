@@ -10,11 +10,17 @@
 }
 
 #userStuff{
-    margin: 25px;
+    margin: 5%;
+    background: white;
+    padding: 20px;
+    width: 90%;
+    border-radius: 10px;
 }
 #feedSettingsLight{
     border: none;
     box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
 }
 #feedSettingsDark {
     border: 1px white solid;
@@ -22,6 +28,7 @@
     background-color: #1a1b1c;
     color: white;
 }
+
 
 
 @media screen and (min-width: 768px) {
@@ -39,6 +46,8 @@
     #userStuff {
         margin: 25px;
         margin-left: 165px;
+        width: 60%;
+        margin-left: 20%;
     }
 
     #feedContainer {
@@ -51,6 +60,8 @@
     #userStuff {
         margin: 25px;
         margin-left: 200px;
+        width: 60%;
+        margin-left: 20%;
     }
 
     #feedContainer {
@@ -63,6 +74,8 @@
     #userStuff {
         margin: 25px;
         margin-left: 375px;
+        width: 60%;
+        margin-left: 20%;
     }
 
     #feedContainer {
